@@ -13,35 +13,40 @@ public class ItemParser {
     public List<Item> parseItemList(String valueToParse) throws ItemParseException {
         List<Item> list = new ArrayList<>();
         String[] items = valueToParse.split("##");
-        System.out.println(Arrays.toString(items));
+        //System.out.println(Arrays.toString(items));
 
         for (String item : items) {
-            if (!item.matches(".*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*")){continue;}
-            list.add(parseSingleItem(item));
+            //if (!item.matches(".*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*")){continue;}
+            try {
+                list.add(parseSingleItem(item));
+            }catch (ItemParseException ignored) {}
         }
-        System.out.println(list);
+        //System.out.println(list);
         return list;
     }
 
     public Item parseSingleItem(String singleItem) throws ItemParseException {
 
-        if (!singleItem.matches(".*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*")){throw new ItemParseException();}
+        if (!singleItem.matches(".*[;:@^%*!].+[;:@^%*!].*[;:@^%*!].+[;:@^%*!].*[;:@^%*!].+[;:@^%*!].*[;:@^%*!].+")){throw new ItemParseException();}
 
         ArrayList<String> list = new ArrayList<>();
-        String[] asStrArr = singleItem.split(";");
+        String[] asStrArr = singleItem.split("[;:@^%*!]");
         //System.out.println(Arrays.toString(asStrArr));
 
-        for (String element : asStrArr) {
-            String[] foo = element.split("[:@^%*]$*");
-            list.add(foo[1]);
-            //System.out.println(Arrays.toString(foo));
+        for (int i = 0; i < asStrArr.length; i++) {
+            if (i % 2 != 0){list.add(asStrArr[i]);}
         }
         //System.out.println(list);
         //System.out.println(Arrays.toString(asStrArr));
         String name = list.get(0).toLowerCase();
-        Double price = Double.valueOf(list.get(1));
+        double price;
+        try {
+            price = Double.parseDouble(list.get(1));
+        }catch (NumberFormatException e){ throw new ItemParseException();}
         String type = list.get(2).toLowerCase();
         String exp = list.get(3).replaceAll("#", "");
         return new Item(name, price, type, exp);
     }
+
+
 }
