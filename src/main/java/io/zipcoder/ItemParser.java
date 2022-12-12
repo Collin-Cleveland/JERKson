@@ -16,14 +16,16 @@ public class ItemParser {
         System.out.println(Arrays.toString(items));
 
         for (String item : items) {
+            if (!item.matches(".*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*")){continue;}
             list.add(parseSingleItem(item));
         }
+        System.out.println(list);
         return list;
     }
 
     public Item parseSingleItem(String singleItem) throws ItemParseException {
 
-        if (!singleItem.matches(".*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*##")){throw new ItemParseException();}
+        if (!singleItem.matches(".*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*")){throw new ItemParseException();}
 
         ArrayList<String> list = new ArrayList<>();
         String[] asStrArr = singleItem.split(";");
