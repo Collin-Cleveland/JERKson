@@ -23,15 +23,13 @@ public class ItemParser {
 
     public Item parseSingleItem(String singleItem) throws ItemParseException {
 
+        if (!singleItem.matches(".*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*;.*[:@^%*].*##")){throw new ItemParseException();}
+
         ArrayList<String> list = new ArrayList<>();
         String[] asStrArr = singleItem.split(";");
         //System.out.println(Arrays.toString(asStrArr));
 
         for (String element : asStrArr) {
-//            Pattern p = Pattern.compile(":$*");
-//            Matcher m = p.matcher(element);
-//            boolean b = m.matches();
-//            if (b) {list.add(element);}
             String[] foo = element.split("[:@^%*]$*");
             list.add(foo[1]);
             //System.out.println(Arrays.toString(foo));
